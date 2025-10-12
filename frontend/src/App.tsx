@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { LoginForm } from './components/auth/LoginForm';
 import { RegisterForm } from './components/auth/RegisterForm';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { ForgotPasswordForm } from './components/auth/ForgotPasswordForm';
 import { Dashboard } from './components/Dashboard';
 
 const AppRoutes = () => {
@@ -17,6 +18,10 @@ const AppRoutes = () => {
       <Route 
         path="/register" 
         element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <RegisterForm />} 
+      />
+      <Route 
+        path="/forgot-password" 
+        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <ForgotPasswordForm />} 
       />
       <Route
         path="/dashboard"

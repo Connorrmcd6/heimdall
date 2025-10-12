@@ -10,19 +10,50 @@ services:
       - /app/node_modules
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - VITE_API_URL=http://localhost:8080
+      - VITE_AWS_REGION=us-east-1
+      - VITE_AWS_ENDPOINT=http://localhost:4566
+    depends_on:
+      - localstack
     command: npm run dev -- --host 0.0.0.0
 
-  # LocalStack for AWS services simulation
+  # Future Go service placeholder
+  # vault-api:
+  #   build:
+  #     context: ./services/vault-api
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     - AWS_ENDPOINT_URL=http://localstack:4566
+  #     - AWS_REGION=us-east-1
+  #     - AWS_ACCESS_KEY_ID=test
+  #     - AWS_SECRET_ACCESS_KEY=test
+  #   depends_on:
+  #     - localstack
+
+  # LocalStack for AWS services simulation - Fixed volume mapping
   localstack:
-    image: localstack/localstack:latest
+    image: localstack/localstack:2.3 # Using stable 2.x version
     ports:
       - "4566:4566"
     environment:
       - SERVICES=s3,dynamodb,cognito-idp,kms
       - DEBUG=1
-      - DATA_DIR=/tmp/localstack/data
+      - PERSISTENCE=1
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - DOCKER_HOST=unix:///var/run/docker.sock
     volumes:
-      - localstack_data:/tmp/localstack
+      - localstack_data:/var/lib/localstack # Changed volume mapping
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 90s
 
 volumes:
   localstack_data:
