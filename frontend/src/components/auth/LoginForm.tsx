@@ -78,7 +78,7 @@ export const LoginForm: React.FC = () => {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="demo@vault.com"
+                  placeholder="demo@heimdall.com"
                   {...register('email')}
                   className={errors.email ? 'border-destructive focus-visible:ring-destructive' : ''}
                 />
@@ -125,7 +125,7 @@ export const LoginForm: React.FC = () => {
             <div className="mt-6 p-4 bg-slate-50 rounded-lg border">
               <p className="text-sm font-medium text-slate-700 mb-2">Demo Credentials:</p>
               <div className="space-y-1 text-sm text-slate-600">
-                <p><code className="bg-white px-2 py-1 rounded">demo@vault.com</code></p>
+                <p><code className="bg-white px-2 py-1 rounded">demo@heimdall.com</code></p>
                 <p><code className="bg-white px-2 py-1 rounded">Password123!</code></p>
               </div>
             </div>

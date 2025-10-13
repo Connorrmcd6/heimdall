@@ -4,16 +4,38 @@ import { LoginForm } from './components/auth/LoginForm';
 import { RegisterForm } from './components/auth/RegisterForm';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { ForgotPasswordForm } from './components/auth/ForgotPasswordForm';
+import { MFAVerificationForm } from './components/auth/MFAVerificationForm';
 import { Dashboard } from './components/Dashboard';
 
 const AppRoutes = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, requiresMFA } = useAuth();
 
   return (
     <Routes>
+      {/* MFA Verification Route */}
+      <Route 
+        path="/mfa-verify" 
+        element={
+          requiresMFA ? (
+            <MFAVerificationForm />
+          ) : (
+            <Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />
+          )
+        } 
+      />
+      
+      {/* Redirect authenticated users away from auth pages */}
       <Route 
         path="/login" 
-        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginForm />} 
+        element={
+          requiresMFA ? (
+            <Navigate to="/mfa-verify" replace />
+          ) : isAuthenticated ? (
+            <Navigate to="/dashboard" replace />
+          ) : (
+            <LoginForm />
+          )
+        } 
       />
       <Route 
         path="/register" 
