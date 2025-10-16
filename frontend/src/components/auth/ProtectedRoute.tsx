@@ -1,30 +1,29 @@
-import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { Loader2 } from 'lucide-react';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuth();
+export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+  const { isAuthenticated, isLoading, otpRequired } = useAuth();
   const location = useLocation();
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
-          <p className="text-slate-600">Loading...</p>
-        </div>
-      </div>
-    );
+    // You could return a loading spinner here
+    return <div>Loading...</div>;
+  }
+
+  if (otpRequired) {
+    // Redirect to OTP verification if required
+    return <Navigate to="/otp-verification" state={{ from: location }} replace />;
   }
 
   if (!isAuthenticated) {
+    // Redirect to login if not authenticated
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  // If authenticated, render the children
   return <>{children}</>;
 };

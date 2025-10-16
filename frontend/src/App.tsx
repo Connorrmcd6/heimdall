@@ -1,11 +1,12 @@
+import './App.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import { LoginForm } from './components/auth/LoginForm';
-import { RegisterForm } from './components/auth/RegisterForm';
+import { Login } from './routes/Login';
+import { Signup } from './routes/Signup';
+import { OTPVerification } from './routes/OTPVerification';
+import { Dashboard } from './routes/Dashboard';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
-import { ForgotPasswordForm } from './components/auth/ForgotPasswordForm';
-import { MFAVerificationForm } from './components/auth/MFAVerificationForm';
-import { Dashboard } from './components/Dashboard';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+// import { ForgotPasswordForm } from './components/auth/ForgotPasswordForm';
 
 const AppRoutes = () => {
   const { isAuthenticated, requiresMFA } = useAuth();
@@ -14,10 +15,10 @@ const AppRoutes = () => {
     <Routes>
       {/* MFA Verification Route */}
       <Route 
-        path="/mfa-verify" 
+        path="/otp-verify" 
         element={
           requiresMFA ? (
-            <MFAVerificationForm />
+            <OTPVerification />
           ) : (
             <Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />
           )
@@ -29,22 +30,22 @@ const AppRoutes = () => {
         path="/login" 
         element={
           requiresMFA ? (
-            <Navigate to="/mfa-verify" replace />
+            <Navigate to="/otp-verify" replace />
           ) : isAuthenticated ? (
             <Navigate to="/dashboard" replace />
           ) : (
-            <LoginForm />
+            <Login />
           )
         } 
       />
       <Route 
-        path="/register" 
-        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <RegisterForm />} 
+        path="/signup" 
+        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Signup />} 
       />
-      <Route 
+      {/* <Route 
         path="/forgot-password" 
         element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <ForgotPasswordForm />} 
-      />
+      /> */}
       <Route
         path="/dashboard"
         element={
