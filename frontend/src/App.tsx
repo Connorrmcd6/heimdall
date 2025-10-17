@@ -14,7 +14,6 @@ const AppRoutes = () => {
 
   return (
     <Routes>
-      {/* MFA Verification Route */}
       <Route 
         path="/otp-verify" 
         element={
@@ -26,7 +25,6 @@ const AppRoutes = () => {
         } 
       />
       
-      {/* Redirect authenticated users away from auth pages */}
       <Route 
         path="/login" 
         element={
