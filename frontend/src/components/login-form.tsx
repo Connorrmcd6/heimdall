@@ -49,9 +49,9 @@ export function LoginForm({
 
     try {
       await login(data.email, data.password)
-      navigate("/dashboard")
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Login failed")
+      const errorMessage = err instanceof Error ? err.message : "Login failed"
+      setError(errorMessage)
     } finally {
       setIsSubmitting(false)
     }

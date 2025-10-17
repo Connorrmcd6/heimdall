@@ -18,7 +18,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, ArrowLeft } from "lucide-react"
 import { useAuth } from "../contexts/AuthContext"
 
-export function OTPForm({ className, ...props }: React.ComponentProps<"div">) {
+export function MFAForm({ className, ...props }: React.ComponentProps<"div">) {
   const { verifyMFA, isLoading, logout, pendingMFAUser } = useAuth()
   const [code, setCode] = useState("")
   const [error, setError] = useState("")
@@ -30,8 +30,12 @@ export function OTPForm({ className, ...props }: React.ComponentProps<"div">) {
     try {
       setError("")
       await verifyMFA(code)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Verification failed")
+    } catch (err: any) {
+      if (err.code === 'CodeMismatchException') {
+        setError("Invalid verification code. Please try again.");
+      } else {
+        setError(err instanceof Error ? err.message : "Verification failed")
+      }
       // Clear the code on error so user can try again
       setCode("")
     }

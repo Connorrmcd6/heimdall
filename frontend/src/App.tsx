@@ -3,11 +3,12 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { ThemeProvider } from "./components/theme-provider"
 import { Login } from './routes/Login';
 import { Signup } from './routes/Signup';
-import { OTPVerification } from './routes/OTPVerification';
+import { MFAVerification } from './routes/MFAVerification';
+import { MFASetup } from './routes/MFASetup';
 import { Dashboard } from './routes/Dashboard';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
-// import { ForgotPasswordForm } from './components/auth/ForgotPasswordForm';
+import { ForgotPassword } from './routes/ForgotPassword';
 
 const AppRoutes = () => {
   const { isAuthenticated, requiresMFA } = useAuth();
@@ -15,21 +16,26 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route 
-        path="/otp-verify" 
+        path="/mfa-verify" 
         element={
           requiresMFA ? (
-            <OTPVerification />
+            <MFAVerification />
           ) : (
             <Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />
           )
         } 
+      />
+
+      <Route 
+        path="/mfa-setup" 
+        element={<MFASetup />} 
       />
       
       <Route 
         path="/login" 
         element={
           requiresMFA ? (
-            <Navigate to="/otp-verify" replace />
+            <Navigate to="/mfa-verify" replace />
           ) : isAuthenticated ? (
             <Navigate to="/dashboard" replace />
           ) : (
@@ -41,10 +47,10 @@ const AppRoutes = () => {
         path="/signup" 
         element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Signup />} 
       />
-      {/* <Route 
+      <Route 
         path="/forgot-password" 
-        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <ForgotPasswordForm />} 
-      /> */}
+        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <ForgotPassword />} 
+      />
       <Route
         path="/dashboard"
         element={
