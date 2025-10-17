@@ -20,6 +20,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu"
 import {
   SidebarMenu,
@@ -27,6 +30,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { Moon, Sun, Monitor } from "lucide-react" 
+import { useTheme } from "@/components/theme-provider" 
 
 export function NavUser({
   user,
@@ -38,12 +43,12 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
-  const { logout } = useAuth() // Add this line to access logout function
+  const { logout } = useAuth()
+  const { setTheme } = useTheme()
   
   // Handler for logout action
   const handleLogout = () => {
     logout()
-    // The logout function in your AuthContext should handle redirecting to login
   }
 
   return (
@@ -102,6 +107,26 @@ export function NavUser({
                 <IconNotification />
                 Notifications
               </DropdownMenuItem>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  <Moon className="mr-2 h-4 w-4" />
+                  <span>Theme</span>
+                </DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  <DropdownMenuItem onClick={() => setTheme("light")}>
+                    <Sun className="mr-2 h-4 w-4" />
+                    <span>Light</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTheme("dark")}>
+                    <Moon className="mr-2 h-4 w-4" />
+                    <span>Dark</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTheme("system")}>
+                    <Monitor className="mr-2 h-4 w-4" />
+                    <span>System</span>
+                  </DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>

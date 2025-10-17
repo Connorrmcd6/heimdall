@@ -1,5 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { ThemeProvider } from "./components/theme-provider"
 import { Login } from './routes/Login';
 import { Signup } from './routes/Signup';
 import { OTPVerification } from './routes/OTPVerification';
@@ -61,12 +62,15 @@ const AppRoutes = () => {
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <AppRoutes />
-      </Router>
-    </AuthProvider>
+    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+      <AuthProvider>
+        <Router>
+          <AppRoutes />
+        </Router>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
+
 
 export default App;
